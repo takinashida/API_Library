@@ -44,14 +44,14 @@ class LoanViewSet(ModelViewSet):
 
     def perform_create(self, serializer, send_loan_reminder=None):
         loan = serializer.save(user=self.request.user)
+        if loan.user.telegram_chat_id:
+            notify_at = loan.return_at - timedelta(days=2)
 
-        notify_at = loan.return_at - timedelta(days=2)
-
-        if notify_at > timezone.now():
-            send_loan_reminder.apply_async(
-                args=[loan.id],
-                eta=notify_at
-            )
+            if notify_at > timezone.now():
+                send_loan_reminder.apply_async(
+                    args=[loan.id],
+                    eta=notify_at
+                )
 
     def perform_destroy(self, serializer):
         loan = serializer.save(user=self.request.user)

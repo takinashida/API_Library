@@ -42,10 +42,11 @@ def send_overdue_reminders():
     )
 
     for loan in overdue_loans:
-        message = f'⏰ Напоминание!\n\n Книга {loan.book.title} просрочена на {(now - loan.return_at).days} дней!\n '
+        if loan.user.telegram_chat_id:
+            message = f'⏰ Напоминание!\n\n Книга {loan.book.title} просрочена на {(now - loan.return_at).days} дней!\n '
 
-        send_telegram_message(
-            chat_id=loan.user.telegram_chat_id,
-            text=message
-        )
+            send_telegram_message(
+                chat_id=loan.user.telegram_chat_id,
+                text=message
+            )
 

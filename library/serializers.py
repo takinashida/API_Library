@@ -3,7 +3,7 @@ from .models import Author
 from .models import Book
 from django.utils.timezone import now
 from .models import Loan
-from .validators import value_alpha, book_count
+from .validators import value_alpha
 
 
 class AuthorSerializer(serializers.ModelSerializer):
@@ -26,8 +26,7 @@ class AuthorSerializer(serializers.ModelSerializer):
 class BookSerializer(serializers.ModelSerializer):
     author = serializers.PrimaryKeyRelatedField(queryset=Author.objects.all(), write_only=True, required=True)
     author_name = serializers.CharField(source="author.__str__", read_only=True)
-    title = serializers.CharField(validators=[value_alpha])
-    genre = serializers.CharField(validators=[value_alpha])
+
 
     class Meta:
         model = Book
@@ -40,7 +39,26 @@ class BookSerializer(serializers.ModelSerializer):
             "count_available",
             "all_count",
             )
-        validators = [book_count]
+
+    def validate(self, attrs):
+        count_available = attrs.get(
+            "count_available",
+            self.instance.count_available if self.instance else None
+        )
+        all_count = attrs.get(
+            "all_count",
+            self.instance.all_count if self.instance else None
+        )
+
+        if count_available is None or all_count is None:
+            return attrs
+
+        if count_available > all_count:
+            raise serializers.ValidationError(
+                "Остаток не может быть больше общего количества"
+            )
+
+        return attrs
 
 
 

@@ -3,7 +3,7 @@ version: "3.9"
 services:
   backend:
     build: .
-    container_name: django-backend
+    container_name: library-backend
     command: >
       sh -c "python manage.py migrate --noinput &&
              gunicorn config.wsgi:application --bind 0.0.0.0:8000"
@@ -31,7 +31,7 @@ services:
 
   db:
     image: postgres:16
-    container_name: my-postgres
+    container_name: library-postgres
     env_file:
       - .env
     ports:
@@ -52,7 +52,6 @@ services:
     depends_on:
       - backend
       - redis
-      - db
 
   celery-beat:
     build: .
@@ -62,7 +61,6 @@ services:
     depends_on:
       - backend
       - redis
-      - db
 
 volumes:
   postgres_data:

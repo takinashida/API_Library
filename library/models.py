@@ -33,7 +33,7 @@ class Loan(models.Model):
     user = models.ForeignKey("users.User", on_delete=models.CASCADE, verbose_name="Прокатчик")
     book = models.ForeignKey("library.Book", on_delete=models.CASCADE, verbose_name="Книга")
     taken_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата выдачи")
-    return_at = models.DateTimeField(null=True, blank=True, verbose_name="Дата возврата")
+    return_at = models.DateTimeField(verbose_name="Дата возврата")
     is_active = models.BooleanField(verbose_name="Актуальность", default=True)
     is_overdue = models.BooleanField(default=False)
 

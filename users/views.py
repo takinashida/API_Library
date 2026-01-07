@@ -19,16 +19,16 @@ class UserCreateAPIView(generics.CreateAPIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        print(1)
+
         user = serializer.save()
         token = create_email_confirmation(user)
-        print(2)
+
         confirm_url = request.build_absolute_uri(
             reverse('users:email-confirm', args=[token])
         )
-        print(3)
+
         send_confirmation_email.delay(user.email, confirm_url)
-        print(4)
+
         return Response(
             {'detail': 'Подтвердите почту'},
             status=status.HTTP_201_CREATED

@@ -5,7 +5,6 @@ from users.models import EmailConfirmationToken
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 def create_email_confirmation(user):
-    print("CC")
     token = secrets.token_hex(32)
 
     EmailConfirmationToken.objects.create(

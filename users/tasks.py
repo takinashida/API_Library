@@ -4,7 +4,6 @@ from django.conf import settings
 
 @shared_task
 def send_confirmation_email(email, url):
-    print("SC")
     send_mail(
         subject='Подтверждение почты',
         message=f'Подтвердите почту по ссылке:\n{url}',

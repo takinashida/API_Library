@@ -1,3 +1,4 @@
+from django.conf import settings
 from rest_framework import serializers
 from users.models import User
 from django.contrib.auth.hashers import make_password
@@ -13,9 +14,18 @@ class  UserSerializer(serializers.ModelSerializer):
         password = validated_data.pop("password")
         hash_password = make_password(password)
         validated_data["password"] = hash_password
+        validated_data["is_active"]=False
         instance = User(**validated_data)
         instance.save()
         return instance
 
-    # def get_payments(self, obj):
-    #     return PaymentSerializer(obj.payment.filter, many=True ).data
+
+
+class PasswordResetRequestSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+
+class PasswordResetSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(min_length=8)
+

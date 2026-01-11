@@ -1,5 +1,6 @@
 from datetime import timedelta
-
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from django.shortcuts import render
 from django.utils import timezone
 from django_celery_beat.models import CrontabSchedule, PeriodicTask
@@ -27,12 +28,22 @@ class AuthorViewSet(ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
 class BookViewSet(ModelViewSet):
-    queryset = Book.objects.all()
+    queryset = Book.objects.filter(is_public=True)
     serializer_class = BookSerializer
     filter_backends = (DjangoFilterBackend, SearchFilter)
     filterset_fields = ("author", "genre")
     search_fields = ("title",)
     permission_classes = (IsAuthenticated,)
+
+
+    @action(detail=True, methods=["post"])
+    def is_public(self, request, pk=None):
+        book = self.get_object()
+        book.is_publuc = False if book.is_publuc else True
+        book.save()
+
+        return Response({"is_public": book.is_publuc})
+
 
 class LoanViewSet(ModelViewSet):
     queryset = Loan.objects.select_related("user", "book")
@@ -44,6 +55,7 @@ class LoanViewSet(ModelViewSet):
 
     def perform_create(self, serializer, send_loan_reminder=None):
         loan = serializer.save(user=self.request.user)
+
         if loan.user.telegram_chat_id:
             notify_at = loan.return_at - timedelta(days=2)
 

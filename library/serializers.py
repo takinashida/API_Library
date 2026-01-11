@@ -86,6 +86,11 @@ class LoanSerializer(serializers.ModelSerializer):
                 {"book": "Книга недоступна"}
             )
 
+        if not book.is_public:
+            raise serializers.ValidationError(
+                {"book": "Книга недоступна"}
+            )
+
         return attrs
 
     def create(self, validated_data):

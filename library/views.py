@@ -39,10 +39,10 @@ class BookViewSet(ModelViewSet):
     @action(detail=True, methods=["post"])
     def is_public(self, request, pk=None):
         book = self.get_object()
-        book.is_publuc = False if book.is_publuc else True
+        book.is_public = False if book.is_public else True
         book.save()
 
-        return Response({"is_public": book.is_publuc})
+        return Response({"is_public": book.is_public})
 
 
 class LoanViewSet(ModelViewSet):

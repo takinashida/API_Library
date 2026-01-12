@@ -97,6 +97,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 if os.getenv("GITHUB_ACTIONS") == "true":
+    CELERY_TASK_ALWAYS_EAGER = True
+    CELERY_TASK_EAGER_PROPAGATES = True
+
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",

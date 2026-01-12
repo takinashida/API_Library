@@ -102,7 +102,6 @@ class BookViewSetTests(APITestCase):
     def test_book_list_ok(self):
         self.client.force_authenticate(self.user)
         response = self.client.get(self.url_list)
-        print(self.book.id - self.book.is_public)
         self.assertEqual(response.status_code, 200)
 
     def test_book_filter_by_author(self):

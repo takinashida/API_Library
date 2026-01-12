@@ -83,16 +83,26 @@ class BookViewSetTests(APITestCase):
             author=self.author,
             genre="novel",
             all_count=5,
-            count_available=5
+            count_available=5,
+            is_public = True
         )
 
         self.url_list = reverse("library:book-list")
         self.url_detail = lambda pk: reverse("library:book-detail", args=[pk])
+        self.url_public = lambda pk: reverse("library:book-is-public", args=[pk])
+
+
+    def test_book_is_public_ok(self):
+        self.client.force_authenticate(self.user)
+        response = self.client.post(self.url_public(self.book.id))
+        self.assertEqual(response.status_code, 200)
+
 
     # LIST #######################################################
     def test_book_list_ok(self):
         self.client.force_authenticate(self.user)
         response = self.client.get(self.url_list)
+        print(self.book.id - self.book.is_public)
         self.assertEqual(response.status_code, 200)
 
     def test_book_filter_by_author(self):
@@ -112,6 +122,7 @@ class BookViewSetTests(APITestCase):
         })
         self.assertEqual(response.status_code, 201)
 
+
     # UPDATE #####################################################
     def test_update_book_ok(self):
         self.client.force_authenticate(self.user)
@@ -126,6 +137,8 @@ class BookViewSetTests(APITestCase):
         self.client.force_authenticate(self.user)
         response = self.client.delete(self.url_detail(self.book.id))
         self.assertEqual(response.status_code, 204)
+
+
 
 
 
@@ -148,7 +161,8 @@ class LoanViewSetTests(APITestCase):
             author=self.author,
             genre="novel",
             all_count=2,
-            count_available=2
+            count_available=2,
+            is_public=True
         )
 
         self.url_list = reverse("library:loan-list")

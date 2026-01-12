@@ -35,6 +35,10 @@ class BookViewSet(ModelViewSet):
     search_fields = ("title",)
     permission_classes = (IsAuthenticated,)
 
+    def get_queryset(self):
+        if self.action in ("is_public", "update", "partial_update", "destroy"):
+            return Book.objects.all()
+        return Book.objects.filter(is_public=True)
 
     @action(detail=True, methods=["post"])
     def is_public(self, request, pk=None):

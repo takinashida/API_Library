@@ -20,7 +20,7 @@ class Book(models.Model):
     genre = models.CharField(max_length=100, verbose_name="Жанр")
     count_available = models.PositiveIntegerField(verbose_name="Осталось")
     all_count = models.PositiveIntegerField(verbose_name="Всего")
-    is_public = models.BooleanField(verbose_name="Публичность", default=False)
+    is_public = models.BooleanField(verbose_name="Публичность", default=True)
 
     def __str__(self):
         return f"{self.title}"

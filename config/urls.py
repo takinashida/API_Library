@@ -23,5 +23,5 @@ urlpatterns = [
     path('users/', include("users.urls", namespace="users")),
     path('', include("library.urls", namespace="library")),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
-    path("api/schema/swagger/", SpectacularSwaggerView.as_view(url_name="library:schema")),
+    path("api/schema/swagger/", SpectacularSwaggerView.as_view(url_name="schema")),
 ]

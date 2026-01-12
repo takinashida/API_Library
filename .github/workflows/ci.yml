@@ -42,7 +42,7 @@ jobs:
     - name: Deploy
       run: |
         ssh -o ServerAliveInterval=30 -o ServerAliveCountMax=120 -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-          cd ~/projects/DRF
+          cd ~/projects/API_Library
           git pull
           source venv/bin/activate
           pip install -r requirements.txt

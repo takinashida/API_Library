@@ -55,7 +55,11 @@ services:
 
   celery-beat:
     build: .
-    command: celery -A config beat -l info
+    command: >
+      sh -c "
+      python manage.py migrate &&
+      celery -A config beat -l info
+      "
     env_file:
       - .env
     depends_on:

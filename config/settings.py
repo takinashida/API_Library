@@ -99,7 +99,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 if os.getenv("GITHUB_ACTIONS") == "true":
     CELERY_TASK_ALWAYS_EAGER = True
     CELERY_TASK_EAGER_PROPAGATES = True
-
+    SITE_URL = "http://localhost:8000"
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
@@ -107,6 +107,7 @@ if os.getenv("GITHUB_ACTIONS") == "true":
         }
     }
 else:
+    SITE_URL = "http://158.160.215.114"
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',

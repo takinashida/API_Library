@@ -23,7 +23,7 @@ class UserCreateAPIView(generics.CreateAPIView):
         user = serializer.save()
         token = create_email_confirmation(user)
 
-        confirm_url = request.build_absolute_url(
+        confirm_url = request.build_absolute_uri(
             reverse('users:email-confirm', args=[token])
         )
 
